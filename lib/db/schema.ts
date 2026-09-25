@@ -126,7 +126,12 @@ export const stageRuns = pgTable("stage_runs", {
  */
 export const sessionModeEnum = pgEnum("session_mode", ["edit", "reject_reason"]);
 
-export const sessions = pgTable("sessions", {
+// Named "bot_sessions", not "sessions" - the latter collides with a
+// pre-existing table in this Supabase project (from an unrelated app
+// sharing the same database) and "CREATE TABLE IF NOT EXISTS" silently
+// no-ops against it instead of creating ours, which is exactly what
+// happened the first time this migrated (see docs/decisions.md).
+export const sessions = pgTable("bot_sessions", {
   chatId: bigint("chat_id", { mode: "number" }).primaryKey(),
   mode: sessionModeEnum("mode").notNull(),
   draftId: uuid("draft_id").notNull(),
